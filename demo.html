@@ -1,68 +1,1384 @@
+<!DOCTYPE html>
 <html>
-<style>
-h1 {text-align: center;}
-</style>
-<h1>Expresso demo samples</h1>
+    <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /*Define color palette: linear-gradient(to right, #bacbde, #97b4d5, #739ecd, #4c88c4, #0072bb, #001523)*/
+        :root {
+            --c0: #00243c;
+            --c1: #0072bb;
+            --c2: #4c88c4;
+            --c3: #739ecd;
+            --c4: #97b4d5;
+            --c5: #bacbde;
+        }
 
-<h2>1. Samples from Expresso dataset</h2>
+        td {
+            vertical-align: middle;
+        }
+        audio {
+            width: 20vw;
+            min-width: 100px;
+            max-width: 200px;
+          }
+        .small-audio {
+            width: 100px;
+            height: 35px;
+        }
+        .float-div {
+            box-shadow: 0 0.5rem 1rem var(--c5);
+            padding : 3rem;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            border-radius: 0.5rem;
+        }
+        body {
+          color: var(--c0);
+        }
+        h1 {color: var(--c1);}
+        h2 {color: var(--c2);}
+        h3 {color: var(--c3);}
+        #small-caps {
+          font-variant-caps: small-caps;
+        }
+        #resyn-conv {
+          display: none;
+        }
+        #resyn-LJ-conv {
+          display: none;
+        }
+        #resyn-emo-conv {
+          display: none;
+        }
+        p {text-align: justify;}
+    </style>
+    </head>
 
-<h3>Read speech</h3>
+    <div class="container float-div">
+        <div class="text-center">
+        <h1 id="small-caps">Expresso ☕</h1>
+        <h3>A Benchmark and Analysis of Discrete Expressive Speech Resynthesis</h3>
+        </div>
+        <br>
+        <p>
+            We introduce <a id="small-caps">Expresso</a>, a high-quality expressive
+            speech dataset that includes both expressively rendered read speech (7 styles)
+            and improvised dialogues rendered (26 styles). The dataset includes 4 speakers
+            (2 males, 2 females), and totals 40 hours. The task of the Expresso Benchmark is
+            to resynthesize the input audio using a low-bitrate discrete code that has been
+            obtained without supervision from text.
+        </p>
+        <p>
+            Here, we provide illustrative samples of the Expresso dataset and of resynthesis
+            results from baseline systems using discrete HuBERT and Encodec units.
+        </p>
+    </div>
 
-<table style="text-align: center"><tr><th style="text-align: center"></th><th style="text-align: center">read-default</th><th style="text-align: center">read-laughing</th><th style="text-align: center">read-sad</th><th style="text-align: center">read-whisper</th></tr><tr><td>Expresso Speaker 06</td><td><audio controls style='width: 200px;' src='srcs/1/S06_default_emphasis_00179.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S06_laughing_00352.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S06_sad_00345.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S06_whisper_00336.wav'></audio>
-</td></tr><tr><td>Expresso Speaker 08</td><td><audio controls style='width: 200px;' src='srcs/1/S08_default_essentials_00035.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S08_laughing_00363.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S08_sad_00345.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S08_whisper_00350.wav'></audio>
-</td></tr></table>
-<h3>Conversational speech</h3>
+    <div class="container">
+        <h2>1. The <a id="small-caps">Expresso</a> Dataset</h2>
+        <br>
+        <p>
+            We present here samples from the <a id="small-caps">Expresso</a> dataset, which
+            have been selected to represent the diversity of expression of this dataset.
+        </p>
+    </div>
 
-<table style="text-align: center"><tr><th style="text-align: center"></th><th style="text-align: center">conv-default</th><th style="text-align: center">conv-child</th><th style="text-align: center">conv-happy</th><th style="text-align: center">conv-fast</th></tr><tr><td>Expresso Speaker 06</td><td><audio controls style='width: 200px;' src='srcs/1/S05_S06_default_010_1-S06_ss006.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S06_S08_child-childdir_003_1-S06_ss001.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S06_S07_happy_003_1-S06_ss002.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S05_S06_fast_005_1-S06_ss011.wav'></audio>
-</td></tr><tr><td>Expresso Speaker 08</td><td><audio controls style='width: 200px;' src='srcs/1/S07_S08_default_007_1-S08_ss009.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S06_S08_childdir-child_004_1-S08_ss009.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S05_S08_happy_013_1-S08_ss008.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/1/S07_S08_fast_004_1-S08_ss007.wav'></audio>
-</td></tr></table>
-<h2>2. Reconstruction examples from our model</h2>
+    <div class="container float-div">
+        <h3>READ short sentences</h3>
+        <p>
+            This section comprises short sentences read by speakers in 7 different styles:
+            default, confused, enunciated, happy, laughing, sad and whisper.
+        </p>
+        <div class="table-responsive pt-3">
+            <table style="text-align: center" class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align: center">Style</th>
+                  <th style="text-align: center">S06</th>
+                  <th style="text-align: center">S05</th>
+                  <th style="text-align: center">S07</th>
+                  <th style="text-align: center">S08</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>default</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S06_default_00093.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S05_default_00364.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S07_default_00018.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S08_default_00355.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>confused</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S06_confused_00093.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S05_confused_00364.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S07_confused_00018.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S08_confused_00355.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>enunciated</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S06_enunciated_00093.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S05_enunciated_00364.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S07_enunciated_00018.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S08_enunciated_00355.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>happy</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S06_happy_00093.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S05_happy_00364.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S07_happy_00018.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S08_happy_00355.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>laughing</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S06_laughing_00093.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S05_laughing_00364.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S07_laughing_00018.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S08_laughing_00355.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>sad</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S06_sad_00093.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S05_sad_00364.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S07_sad_00018.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S08_sad_00355.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>whisper</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S06_whisper_00093.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S05_whisper_00364.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S07_whisper_00018.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_short_sentences/S08_whisper_00355.wav'></audio></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
 
-<table style="text-align: center"><tr><th style="text-align: center"></th><th style="text-align: center"></th><th style="text-align: center">sample expession</th><th style="text-align: center">resynthesized (cond. speaker)</th><th style="text-align: center">resynthesized (cond. speaker+expression)</th></tr><tr><td>input sample 0</td><td><audio controls style='width: 200px;' src='srcs/2/S07_S08_whisper_001_1-S07_ss000.wav'></audio>
-</td><td>conv-whisper</td><td><audio controls style='width: 200px;' src='srcs/2/S07_S08_whisper_001_1-S07_ss000_gen_cond_spkr.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/2/S07_S08_whisper_001_1-S07_ss000_gen_cond_spkr_style.wav'></audio>
-</td></tr><tr><td>input sample 1</td><td><audio controls style='width: 200px;' src='srcs/2/S06_happy_00357.wav'></audio>
-</td><td>read-happy</td><td><audio controls style='width: 200px;' src='srcs/2/S06_happy_00357_gen_cond_spkr.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/2/S06_happy_00357_gen_cond_spkr_style.wav'></audio>
-</td></tr><tr><td>input sample 2</td><td><audio controls style='width: 200px;' src='srcs/2/S06_S07_sleepy_001_1-S07_ss003.wav'></audio>
-</td><td>conv-sleepy</td><td><audio controls style='width: 200px;' src='srcs/2/S06_S07_sleepy_001_1-S07_ss003_gen_cond_spkr.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/2/S06_S07_sleepy_001_1-S07_ss003_gen_cond_spkr_style.wav'></audio>
-</td></tr><tr><td>input sample 3</td><td><audio controls style='width: 200px;' src='srcs/2/S07_S08_default_007_1-S07_ss001.wav'></audio>
-</td><td>conv-default</td><td><audio controls style='width: 200px;' src='srcs/2/S07_S08_default_007_1-S07_ss001_gen_cond_spkr.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/2/S07_S08_default_007_1-S07_ss001_gen_cond_spkr_style.wav'></audio>
-</td></tr><tr><td>input sample 4</td><td><audio controls style='width: 200px;' src='srcs/2/S05_S08_angry_004_1-S08_ss005.wav'></audio>
-</td><td>conv-angry</td><td><audio controls style='width: 200px;' src='srcs/2/S05_S08_angry_004_1-S08_ss005_gen_cond_spkr.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/2/S05_S08_angry_004_1-S08_ss005_gen_cond_spkr_style.wav'></audio>
-</td></tr></table>
-<h2>3. Expressive resynthesis for zero-shot speakers</h2>
+    <div class="container float-div">
+        <h3>READ narration</h3>
+        <p>
+            In this section, the speakers were asked to expressively read long-form narrative
+            pieces. We limit the samples here to two speakers and 20 seconds.
+        </p>
+        <div class="table-responsive pt-3">
+            <table style="text-align: center" class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align: center">Style</th>
+                  <th style="text-align: center">S05</th>
+                  <th style="text-align: center">S07</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>narration</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_narration/S05_narration_longform_00001.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/READ_narration/S07_narration_longform_00001.wav'></audio></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
 
-<table style="text-align: center"><tr><th style="text-align: center"></th><th style="text-align: center"></th><th style="text-align: center">sample expession</th><th style="text-align: center">resynthesized (LJ speaker)</th><th style="text-align: center">resynthesized (VCTK speaker)</th></tr><tr><td>input sample 0</td><td><audio controls style='width: 200px;' src='srcs/3/S07_laughing_00351.wav'></audio>
-</td><td>read-laughing</td><td><audio controls style='width: 200px;' src='srcs/3/S07_laughing_00351_gen_lj.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/3/S07_laughing_00351_gen_vctk_p259.wav'></audio>
-</td></tr><tr><td>input sample 1</td><td><audio controls style='width: 200px;' src='srcs/3/S05_whisper_00356.wav'></audio>
-</td><td>read-whisper</td><td><audio controls style='width: 200px;' src='srcs/3/S05_whisper_00356_gen_lj.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/3/S05_whisper_00356_gen_vctk_p259.wav'></audio>
-</td></tr><tr><td>input sample 2</td><td><audio controls style='width: 200px;' src='srcs/3/S06_S07_sleepy_001_1-S07_ss006.wav'></audio>
-</td><td>conv-sleepy</td><td><audio controls style='width: 200px;' src='srcs/3/S06_S07_sleepy_001_1-S07_ss006_gen_lj.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/3/S06_S07_sleepy_001_1-S07_ss006_gen_vctk_p259.wav'></audio>
-</td></tr><tr><td>input sample 3</td><td><audio controls style='width: 200px;' src='srcs/3/S06_sad_00351.wav'></audio>
-</td><td>read-sad</td><td><audio controls style='width: 200px;' src='srcs/3/S06_sad_00351_gen_lj.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/3/S06_sad_00351_gen_vctk_p259.wav'></audio>
-</td></tr><tr><td>input sample 4</td><td><audio controls style='width: 200px;' src='srcs/3/S08_confused_00360.wav'></audio>
-</td><td>read-confused</td><td><audio controls style='width: 200px;' src='srcs/3/S08_confused_00360_gen_lj.wav'></audio>
-</td><td><audio controls style='width: 200px;' src='srcs/3/S08_confused_00360_gen_vctk_p259.wav'></audio>
-</td></tr></table>
+    <div class="container float-div">
+        <h3>IMPROVISED Conversations</h3>
+        <p>
+            In this section, the speakers are prompted to improvise a dialogue with another
+            speaker in an imaginary situation (eg, two drivers arguing about a car accident).
+            To illustrate the diversity of the dataset, we selected two representative
+            conversations for 9 of the available styles. The files are in stereo, with one
+            speaker per channel. We limit the samples here to 30 seconds.
+        </p>
+        <div class="table-responsive pt-3">
+            <table style="text-align: center" class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align: center">Style</th>
+                  <th style="text-align: center">Sample 1</th>
+                  <th style="text-align: center">Sample 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>angry</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S06_S07_angry_001.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S08_angry_004.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>animal-animaldir</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S07_animal-animaldir_006.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S07_animaldir-animal_001.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>child-childdir</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S07_child-childdir_003.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S07_childdir-child_001.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>disgusted</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S06_S07_disgusted_007.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S07_disgusted_001.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>laughing</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S06_S08_laughing_001.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S06_S07_laughing_001.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>projected</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S06_projected_001.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S07_S08_projected_002.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>sad-sympathetic</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S07_sad-sympathetic_001.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S07_sympathetic-sad_008.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>sarcastic</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S05_S08_sarcastic_002.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S06_S07_sarcastic_002.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>nonverbal</td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S06_S07_nonverbal_001.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" src='audio/expresso/CONVOS/S06_S07_nonverbal_006.wav'></audio></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
 
+    <div class="container">
+        <h2>2. Resynthesis Experiments </h2>
+        <br>
+        <p>
+            Here, we present resynthesis results for two classes of models:
+            Encodec-based and HuBERT-based. Encodec-based models have been directly trained
+            with a compression objective to encode and decode speech using a single codebook
+            (Encodec 1) or 8 codebooks (Encodec 8). HuBERT-based models use a pretrained
+            HuBERT encoder: V1, our best model, is trained on a mixture of read and spontaneous
+            corpora; the base model has been trained on Librispeech. The HuBERT embeddings
+            (layer 12 for V1, layer 9 for base)  are then followed by kmeans clustering (k=2000
+            or 500) on either Expresso (E) or the same training set at the HuBERT model (V1 or
+            LS, resp.). Finally, a HifiGAN vocoder trained on Expresso, VCTK and LJ speech
+            converts the discrete units back to speech. The vocoder is either conditioned on
+            speaker (S) or on both speaker and expressoin (S+E). The best model is on the left
+            (V1/2000_E/S+E).
+        </p>
+        <p>
+            We present representative samples from the most difficult expressions in the dev
+            set of the Expresso dataset, along with the resynthesisized outputs of our
+            encoder/decoder models, in order to illustrate the challenges of the Expresso dataset.
+        </p>
+        <p>
+            We divide the samples into Read and Conversation sections; the singing example
+            illustrate the fact that HuBERT units do not encode pitch, and many extreme pitch
+            excursions (as in child or animal), result in voiceless renderings. In contrast,
+            Encodec units encode well all expressions.
+        </p>
+    </div>
+
+    <div class="container float-div">
+        <h3>Same Speaker Resynthesis</h3>
+        <p>
+            Here, the decoder is conditionned with the same speaker and style as the input speech.
+        </p>
+        <ul class="pagination justify-content-center">
+          <li class="page-item active"><a class="page-link" id="button-resyn-read">Read Speech</a></li>
+          <li class="page-item"><a class="page-link" id="button-resyn-conv">Segmented Conversation Speech</a></li>
+        </ul>
+        <div class="table-responsive pt-0" id="resyn-read">
+            <table style="text-align: center" class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align: center">Style</th>
+                  <th style="text-align: center">Original</th>
+                  <th style="text-align: center">Encodec 8</th>
+                  <th style="text-align: center">Encodec 1</th>
+                  <th style="text-align: center">V1/2000_E/S+E</th>
+                  <th style="text-align: center">V1/2000_E/S</th>
+                  <th style="text-align: center">V1/2000_V1/S+E</th>
+                  <th style="text-align: center">V1/2000_V1/S</th>
+                  <th style="text-align: center">base/2000_E/S+E</th>
+                  <th style="text-align: center">base/2000_E/S</th>
+                  <th style="text-align: center">base/500_LS/S+E</th>
+                  <th style="text-align: center">base/500_LS/S</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>default</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_default_emphasis_00180_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> default </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_default_emphasis_00181_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>confused</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_confused_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> confused </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_confused_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>enunciated</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_enunciated_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> enunciated </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_enunciated_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>happy</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_happy_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> happy </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_happy_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>laughing</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_laughing_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> laughing </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_laughing_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>sad</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_sad_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> sad </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_sad_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>whisper</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_whisper_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> whisper </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_whisper_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>singing</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S08_singing_00001_s000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> singing </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S06_singing_00001_s000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <div class="table-responsive pt-0" id="resyn-conv">
+            <table style="text-align: center" class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align: center">Style</th>
+                  <th style="text-align: center">Original</th>
+                  <th style="text-align: center">Encodec 8</th>
+                  <th style="text-align: center">Encodec 1</th>
+                  <th style="text-align: center">V1/2000_E/S+E</th>
+                  <th style="text-align: center">V1/2000_E/S</th>
+                  <th style="text-align: center">V1/2000_V1/S+E</th>
+                  <th style="text-align: center">V1/2000_V1/S</th>
+                  <th style="text-align: center">base/2000_E/S+E</th>
+                  <th style="text-align: center">base/2000_E/S</th>
+                  <th style="text-align: center">base/500_LS/S+E</th>
+                  <th style="text-align: center">base/500_LS/S</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>sad</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S06_S08_sad-sympathetic_003_1-S06_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> sad </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S06_S08_sympathetic_sad_008_1-S08_ss010_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>angry</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S08_angry_004_1-S05_ss001_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> angry </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S08_angry_004_1-S08_ss006_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>animal</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_animal-animaldir_006_1-S05_ss004_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> animal </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_animaldir-animal_001_1-S07_ss008_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>fearful</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S08_fearful_007_1-S05_ss002_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> fearful </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S08_fearful_007_1-S08_ss009_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>child</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_child-childdir_003_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> child </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_childdir-child_002_1-S07_ss010_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>fast</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_S08_fast_004_1-S07_ss005_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> fast </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_S08_fast_004_1-S08_ss015_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>laughing</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_laughing_006_1-S07_ss008_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> laughing </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_laughing_006_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>disgusted</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_disgusted_003_1-S05_ss002_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> disgusted </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S07_disgusted_003_1-S07_ss013_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>projected</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S06_projected_008_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> projected </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S07_S08_projected_006_1-S07_ss006_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>nonverbal</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S08_nonverbal_006_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> nonverbal </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/ground_truth/S05_S08_nonverbal_006_1-S08_ss004_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_8/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/encodec_1/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/same_speaker/base_500-LS_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container float-div">
+        <h3>Out-of-domain Speaker Resynthesis</h3>
+        <p>
+            In this section, the vocoder is asked to reconstruct an expressive sample from
+            Expresso, but using a speaker voice that is outside of the expresso dataset (LJ
+            voice), and was therefore never recorded with this particular expression.
+        </p>
+        <p>
+            This tests whether the Expresso styles can be generalized outside of the small
+            set of 4 speakers to standard TTS voices. Note that the LJ voice can be made to
+            laugh and whisper and to a certain extent change it's tone of voice according to
+            the required expressive style.
+        </p>
+        <p>
+            Whereas HuBERT units are speaker independant and can be used to resynthetize a
+            message in a target voice that is different from the input voice, Encodec units
+            represent their inputs hollistically with all their acoustic characteristics
+            including voice and therefore cannot perform voice transfer. This is why we only
+            present results with Hubert models.
+        </p>
+        <ul class="pagination justify-content-center">
+          <li class="page-item active"><a class="page-link" id="button-resyn-LJ-read">Read Speech</a></li>
+          <li class="page-item"><a class="page-link" id="button-resyn-LJ-conv">Segmented Conversation Speech</a></li>
+        </ul>
+        <div class="table-responsive pt-0" id="resyn-LJ-read">
+            <table style="text-align: center" class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align: center">Style</th>
+                  <th style="text-align: center">Original</th>
+                  <th style="text-align: center">V1/2000_E/S+E</th>
+                  <th style="text-align: center">V1/2000_E/S</th>
+                  <th style="text-align: center">V1/2000_V1/S+E</th>
+                  <th style="text-align: center">V1/2000_V1/S</th>
+                  <th style="text-align: center">base/2000_E/S+E</th>
+                  <th style="text-align: center">base/2000_E/S</th>
+                  <th style="text-align: center">base/500_LS/S+E</th>
+                  <th style="text-align: center">base/500_LS/S</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>default</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_default_emphasis_00180_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_default_emphasis_00180_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_default_emphasis_00180_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> default </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_default_emphasis_00181_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_default_emphasis_00181_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_default_emphasis_00181_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>confused</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_confused_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_confused_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_confused_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> confused </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_confused_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_confused_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_confused_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>enunciated</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_enunciated_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_enunciated_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_enunciated_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> enunciated </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_enunciated_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_enunciated_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_enunciated_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>happy</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_happy_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_happy_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_happy_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> happy </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_happy_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_happy_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_happy_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>laughing</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_laughing_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_laughing_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_laughing_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> laughing </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_laughing_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_laughing_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_laughing_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>sad</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_sad_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_sad_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_sad_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> sad </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_sad_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_sad_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_sad_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>whisper</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_whisper_00360_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_whisper_00360_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_whisper_00360_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> whisper </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_whisper_00354_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_whisper_00354_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_whisper_00354_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>singing</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S08_singing_00001_s000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S08_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S08_singing_00001_s000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> singing </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S06_singing_00001_s000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S06_singing_00001_s000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S06_singing_00001_s000_gen.wav'></audio></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <div class="table-responsive pt-0" id="resyn-LJ-conv">
+            <table style="text-align: center" class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align: center">Style</th>
+                  <th style="text-align: center">Original</th>
+                  <th style="text-align: center">V1/2000_E/S+E</th>
+                  <th style="text-align: center">V1/2000_E/S</th>
+                  <th style="text-align: center">V1/2000_V1/S+E</th>
+                  <th style="text-align: center">V1/2000_V1/S</th>
+                  <th style="text-align: center">base/2000_E/S+E</th>
+                  <th style="text-align: center">base/2000_E/S</th>
+                  <th style="text-align: center">base/500_LS/S+E</th>
+                  <th style="text-align: center">base/500_LS/S</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>sad</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S06_S08_sad-sympathetic_003_1-S06_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S06_S08_sad-sympathetic_003_1-S06_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> sad </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S06_S08_sympathetic_sad_008_1-S08_ss010_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S06_S08_sympathetic_sad_008_1-S08_ss010_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>angry</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S08_angry_004_1-S05_ss001_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S08_angry_004_1-S05_ss001_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> angry </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S08_angry_004_1-S08_ss006_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S08_angry_004_1-S08_ss006_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>animal</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_animal-animaldir_006_1-S05_ss004_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_animal-animaldir_006_1-S05_ss004_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> animal </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_animaldir-animal_001_1-S07_ss008_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_animaldir-animal_001_1-S07_ss008_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>fearful</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S08_fearful_007_1-S05_ss002_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S08_fearful_007_1-S05_ss002_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> fearful </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S08_fearful_007_1-S08_ss009_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S08_fearful_007_1-S08_ss009_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>child</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_child-childdir_003_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_child-childdir_003_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> child </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_childdir-child_002_1-S07_ss010_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_childdir-child_002_1-S07_ss010_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>fast</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_S08_fast_004_1-S07_ss005_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_S08_fast_004_1-S07_ss005_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> fast </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_S08_fast_004_1-S08_ss015_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_S08_fast_004_1-S08_ss015_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>laughing</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_laughing_006_1-S07_ss008_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_laughing_006_1-S07_ss008_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> laughing </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_laughing_006_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_laughing_006_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>disgusted</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_disgusted_003_1-S05_ss002_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_disgusted_003_1-S05_ss002_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> disgusted </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S07_disgusted_003_1-S07_ss013_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S07_disgusted_003_1-S07_ss013_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>projected</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S06_projected_008_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S06_projected_008_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> projected </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S07_S08_projected_006_1-S07_ss006_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S07_S08_projected_006_1-S07_ss006_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td>nonverbal</td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S08_nonverbal_006_1-S05_ss000_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S08_nonverbal_006_1-S05_ss000_gen.wav'></audio></td>
+                </tr>
+                <tr>
+                  <td> nonverbal </td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/ground_truth/S05_S08_nonverbal_006_1-S08_ss004_gt.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/V1_2000-V1_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_2000-E_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S+E/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                  <td><audio controls controlslist="nodownload" class='small-audio' src='audio/resynthesis/swap_lj_speaker/base_500-LS_E+LJ+V_S/S05_S08_nonverbal_006_1-S08_ss004_gen.wav'></audio></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $("#button-resyn-read").click(function() {
+          document.getElementById("resyn-read").style.display = "block";
+          document.getElementById("resyn-conv").style.display = "none";
+          $("#button-resyn-read").parent().addClass('active');
+          $("#button-resyn-conv").parent().removeClass('active');
+        });
+        $("#button-resyn-conv").click(function() {
+          document.getElementById("resyn-read").style.display = "none";
+          document.getElementById("resyn-conv").style.display = "block";
+          $("#button-resyn-read").parent().removeClass('active');
+          $("#button-resyn-conv").parent().addClass('active');
+        });
+        $("#button-resyn-LJ-read").click(function() {
+          document.getElementById("resyn-LJ-read").style.display = "block";
+          document.getElementById("resyn-LJ-conv").style.display = "none";
+          $("#button-resyn-LJ-read").parent().addClass('active');
+          $("#button-resyn-LJ-conv").parent().removeClass('active');
+        });
+        $("#button-resyn-LJ-conv").click(function() {
+          document.getElementById("resyn-LJ-read").style.display = "none";
+          document.getElementById("resyn-LJ-conv").style.display = "block";
+          $("#button-resyn-LJ-read").parent().removeClass('active');
+          $("#button-resyn-LJ-conv").parent().addClass('active');
+        });
+        $("#button-resyn-emo-read").click(function() {
+          document.getElementById("resyn-emo-read").style.display = "block";
+          document.getElementById("resyn-emo-conv").style.display = "none";
+          $("#button-resyn-emo-read").parent().addClass('active');
+          $("#button-resyn-emo-conv").parent().removeClass('active');
+        });
+        $("#button-resyn-emo-conv").click(function() {
+          document.getElementById("resyn-emo-read").style.display = "none";
+          document.getElementById("resyn-emo-conv").style.display = "block";
+          $("#button-resyn-emo-read").parent().removeClass('active');
+          $("#button-resyn-emo-conv").parent().addClass('active');
+        });
+      });
+    </script>
 </html>
